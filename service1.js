@@ -12,16 +12,16 @@ app.get('/test', (req, res) => {
   job.on('complete', function(result) {
     // handle normal complete
     res.status(200).json(result);
-  }).on('failed', function(errorMessage) {
-    errorMessage = JSON.parse(errorMessage);
+  }).on('failed', function(customMessage) {
+    customMessage = JSON.parse(customMessage);
     
     // handle custom complete with return value
-    if (errorMessage.status) {
-      return res.status(200).json(errorMessage);
+    if (customMessage.status) {
+      return res.status(200).json(customMessage);
     }
     
     // handle error
-    return res.status(500).json(errorMessage);
+    return res.status(500).json(customMessage);
   });
 
   job.save();
