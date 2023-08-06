@@ -5,29 +5,23 @@ const queue = kue.createQueue();
 const port = 3000;
 
 app.get('/test', (req, res) => {
-  const job = queue.create('test', {
-    title: 'test message',
-    user: 1,
-    frames: 200,
-  })
+  const message = req.query.message;
+  const job = queue.create('test', message)
   .priority('high');
 
   job.on('complete', function(result) {
     // handle normal complete
-    console.log('Job completed with data ', result);
-    res.send('Hello World!');
+    res.status(200).json(result);
   }).on('failed', function(errorMessage) {
-    console.log('Job failed!', 'error: ', errorMessage);
     errorMessage = JSON.parse(errorMessage);
     
     // handle custom complete with return value
-    if (errorMessage.status)
-      return res.send('Hello World! ' + errorMessage.message);
+    if (errorMessage.status) {
+      return res.status(200).json(errorMessage);
+    }
     
     // handle error
-    return res.send('Failed! ' + errorMessage.message);
-  }).on('progress', function(progress, data) {
-    console.log('\r  job #' + job.id + ' ' + progress + '% complete with data ', data );
+    return res.status(500).json(errorMessage);
   });
 
   job.save();
@@ -36,5 +30,5 @@ app.get('/test', (req, res) => {
 app.use('/kue-api/', kue.app);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Service 1 listening on port ${port}`);
 });

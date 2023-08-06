@@ -1,16 +1,16 @@
 {
   "dependencies": {
+    "axios": "^1.4.0",
     "express": "^4.18.2",
     "kue": "^0.11.6"
   },
   "name": "event-driven-multi-service",
   "version": "1.0.0",
   "main": "service1.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start1": "node service1.js",
-    "start2": "node service2.js"
+    "start2": "node service2.js",
+    "test": "node test.js"
   },
   "author": "",
   "license": "ISC",
